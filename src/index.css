@@ -85,4 +85,8 @@
   .muted {
     @apply text-muted-foreground;
   }
+
+  .connect-wallet-btn {
+    @apply h-10 min-w-[auto] bg-primary text-white hover:bg-primary/90 text-sm rounded-md px-4 py-2 !important;
+  }
 }
