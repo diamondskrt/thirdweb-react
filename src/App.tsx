@@ -1,6 +1,10 @@
-import { ThirdwebProvider, metamaskWallet, walletConnect } from '@thirdweb-dev/react';
+import {
+  ThirdwebProvider,
+  metamaskWallet,
+  walletConnect,
+} from '@thirdweb-dev/react';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { Navbar } from '@/components/navbar';
+import { Router } from '@/router';
 
 const activeChain = 'mumbai';
 const clientId = import.meta.env.VITE_THIRDWEB_CLIENT_ID;
@@ -15,12 +19,10 @@ function App() {
           }),
           walletConnect(),
         ]}
-        activeChain={activeChain} clientId={clientId}
+        activeChain={activeChain}
+        clientId={clientId}
       >
-        <Navbar />
-        <main className="flex items-center gap-2">
-          Main
-        </main>
+        <Router />
       </ThirdwebProvider>
     </ThemeProvider>
   );

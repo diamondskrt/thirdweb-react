@@ -2,7 +2,7 @@ type IconProps = {
   name: string;
   size?: number;
   className?: string;
-}
+};
 
 export function Icon({ name, size = 40, className }: IconProps) {
   return (
