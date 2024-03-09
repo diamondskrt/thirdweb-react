@@ -19,6 +19,6 @@ module.exports = {
     "no-duplicate-imports": ["error", { "includeExports": true }],
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "no-var": "warn",
+    "@typescript-eslint/no-unused-vars": "warn"
   },
 }
