@@ -1,0 +1,1 @@
+export const ERC721Staking = '0x47FE01eE31e7c5c72AB1d5709ae67aA0665b042C';

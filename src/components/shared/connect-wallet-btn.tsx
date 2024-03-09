@@ -9,7 +9,7 @@ export function ConnectWalletBtn() {
   return (
     <ConnectWallet
       theme={isLight ? 'dark' : 'light'}
-      btnTitle="Login"
+      btnTitle="Connect Wallet"
       className="connect-wallet-btn"
       detailsBtn={() => {
         return <Button>Profile</Button>;
