@@ -1,87 +1,51 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+
+import { Link } from 'react-router-dom';
+import { useEventListener, useDebounceCallback } from 'usehooks-ts';
+
+import { ConnectWalletBtn } from '@/components/shared/connect-wallet-btn';
 import { Icon } from '@/components/shared/icon';
+import { Profile } from '@/components/shared/profile';
 import { ThemeSwitcher } from '@/components/shared/theme-switcher';
-import { useUserContext } from '@/providers/auth-provider';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { LogOut, User, FileCode, Settings } from 'lucide-react';
-import { useSignOutAccount } from '@/api/queries';
-import { useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { cn } from '@/lib/utils';
+
+let lastScrollTop = 0;
 
 export function Navbar() {
-  const { user, isPending } = useUserContext();
-  const navigate = useNavigate();
+  const [isScrolledDown, setIsScrolledDown] = useState(true);
 
-  const { mutate: onSignOut, isSuccess } = useSignOutAccount();
+  const onScroll = () => {
+    const { scrollTop } = document.scrollingElement!;
 
-  useEffect(() => {
-    if (!isSuccess) return;
+    scrollTop > lastScrollTop
+      ? setIsScrolledDown(false)
+      : setIsScrolledDown(true);
 
-    navigate('sign-in');
-  }, [isSuccess, navigate]);
+    lastScrollTop = scrollTop;
+  };
+
+  useEventListener('scroll', useDebounceCallback(onScroll, 50));
 
   return (
-    <header className="flex items-center justify-between shadow-md p-4">
-      <Link to="/">
-        <Icon name="logo" className="w-8 h-8 black dark:white" />
-      </Link>
-      <div className="flex items-center gap-2">
-        <ThemeSwitcher />
-        {isPending ? (
-          <Button variant="outline">Loading...</Button>
-        ) : user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={user.imageUrl} alt="user" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="text-body">{user.userName}</div>
-                    <small>{user.email}</small>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <FileCode className="mr-2 h-4 w-4" />
-                  <span>My Contracts</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onSignOut()}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <Link to="/sign-in">
-            <Button variant="outline">Sign In</Button>
-          </Link>
-        )}
+    <header
+      className={cn(
+        isScrolledDown ? 'top-0' : '-top-full',
+        'fixed left-0 w-dvw bg-background transition-all ease-in-out duration-500 z-20 py-4'
+      )}
+    >
+      <div className="container flex items-center justify-between">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-black dark:text-white"
+        >
+          <Icon name="logo" className="w-10 h-10" />
+          <h4 className="uppercase font-bold">Metaverse</h4>
+        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeSwitcher />
+          <ConnectWalletBtn />
+          <Profile />
+        </div>
       </div>
     </header>
   );

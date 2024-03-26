@@ -1,4 +1,4 @@
-import { DBUser } from '@/models';
+import type { DBUser } from '@/models';
 
 export type IContextType = {
   user: DBUser | null;

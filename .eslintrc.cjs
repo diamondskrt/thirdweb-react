@@ -3,10 +3,17 @@ module.exports = {
   env: { browser: true, es2020: true },
   extends: [
     'eslint:recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended'
   ],
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    }
+  },
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'prettier'],
@@ -16,9 +23,44 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "no-console": ['warn', { allow: ['warn', 'error'] }],
-    "no-duplicate-imports": ["error", { "includeExports": true }],
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-duplicate-imports": "off",
+    "import/no-duplicates": "error",
+    'import/order': [
+      'error',
+      {
+        groups: [
+          ['external', 'builtin'],
+          'internal',
+          ['sibling', 'parent'],
+          'index',
+        ],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '@src/**',
+            group: 'internal',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['internal', 'react'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    "no-console": ["warn", { "allow": ["warn", "error"]}],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-    "@typescript-eslint/no-unused-vars": "warn"
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      'error',
+      {
+        prefer: 'type-imports'
+      }
+    ]
   },
 }

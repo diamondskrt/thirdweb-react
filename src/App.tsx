@@ -1,39 +1,38 @@
 import {
   ThirdwebProvider,
   metamaskWallet,
+  coinbaseWallet,
   walletConnect,
 } from '@thirdweb-dev/react';
-import { Router } from '@/router';
+import { RouterProvider } from 'react-router-dom';
+
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/providers/auth-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { QueryProvider } from '@/providers/query-provider';
-import { AuthProvider } from './providers/auth-provider';
+import { router } from '@/router';
 
 const activeChain = 'mumbai';
 const clientId = import.meta.env.VITE_THIRDWEB_CLIENT_ID;
 
-function App() {
+export function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="thirdweb-ui-theme">
-      <QueryProvider>
-        <AuthProvider>
-          <ThirdwebProvider
-            supportedWallets={[
-              metamaskWallet({
-                recommended: true,
-              }),
-              walletConnect(),
-            ]}
-            activeChain={activeChain}
-            clientId={clientId}
-          >
-            <Router />
-            <Toaster />
-          </ThirdwebProvider>
-        </AuthProvider>
-      </QueryProvider>
+      <AuthProvider>
+        <ThirdwebProvider
+          supportedWallets={[
+            metamaskWallet({
+              recommended: true,
+            }),
+            coinbaseWallet(),
+            walletConnect(),
+          ]}
+          activeChain={activeChain}
+          clientId={clientId}
+        >
+          <RouterProvider router={router} />
+          <Toaster />
+        </ThirdwebProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
-
-export default App;

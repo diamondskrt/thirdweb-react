@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
-import { IContextType } from './models';
+
+import type { IContextType } from './models';
 
 const INITIAL_STATE = {
   user: null,

@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
+
+import type { User } from '@/models';
+
 import { createUserAccount, signInAccount, signOutAccount } from './auth';
-import { User } from '@/models';
 
 export const useSignInAccount = () => {
   return useMutation({

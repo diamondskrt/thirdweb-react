@@ -10,7 +10,7 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 207 90% 54%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -27,12 +27,13 @@
   }
  
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 210 20% 8%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 210 20% 8%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
+    --primary: 207 90% 44%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -48,6 +49,10 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
   }
 
   body {
@@ -70,16 +75,20 @@
     @apply scroll-m-20 text-xl font-semibold tracking-tight;
   }
 
+  h5 {
+    @apply scroll-m-20 text-lg tracking-tight;
+  }
+
+  h6 {
+    @apply scroll-m-20 text-base tracking-tight;
+  }
+
   p {
-    @apply text-sm leading-7 [&:not(:first-child)]:mt-6;
+    @apply text-sm leading-7;
   }
 
   small {
     @apply text-xs leading-none;
-  }
-
-  .text-body {
-    @apply text-sm leading-none;
   }
 
   .flex-center {
@@ -90,11 +99,33 @@
     @apply text-muted-foreground;
   }
 
-  .connect-wallet-btn {
-    @apply h-10 min-w-[auto] bg-primary text-white hover:bg-primary/90 text-sm rounded-md px-4 py-2 !important;
+  .disabled {
+    @apply pointer-events-none opacity-50
   }
 
   .text-gradient {
     @apply bg-gradient-to-r from-primary via-purple-500 to-purple-600 inline-block text-transparent bg-clip-text leading-normal;
   }
+
+  .page-paddings {
+    @apply py-[100px]
+  }
+
+  .grid-container {
+    @apply flex flex-col gap-8 w-full mx-auto px-4 max-w-[1400px];
+  }
+
+  /* start thirdweb styles */
+  .thirdweb-btn {
+    @apply h-10 min-w-[auto] min-h-[auto] bg-primary text-white hover:bg-primary/90 text-sm rounded-3xl px-4 py-2 !important;
+  }
+
+  .thirdweb-btn svg circle {
+    @apply stroke-white !important;
+  }
+
+  .thirdweb-btn.xs-w-full {
+    @apply w-full sm:w-auto !important;
+  }
+  /* end thirdweb styles */
 }

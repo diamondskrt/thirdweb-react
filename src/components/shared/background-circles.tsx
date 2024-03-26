@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { MouseParallax } from 'react-just-parallax';
 
 type BackgroundCirclesProps = {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Theme, ThemeProviderProps } from './model';
+
 import { ThemeProviderContext } from './constants';
+import type { Theme, ThemeProviderProps } from './model';
 
 export function ThemeProvider({
   children,

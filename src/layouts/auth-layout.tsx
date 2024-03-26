@@ -1,7 +1,8 @@
 import { useRef } from 'react';
-import { Icon } from '@/components/shared/icon';
-import { Link, Outlet } from 'react-router-dom';
-import { BackgroundCircles } from './background-circles';
+
+import { Outlet } from 'react-router-dom';
+
+import { BackgroundCircles } from '../components/shared/background-circles';
 
 export function AuthLayout() {
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -10,9 +11,6 @@ export function AuthLayout() {
     <div className="flex h-svh">
       <div className="relative w-[60%] h-full" ref={parallaxRef}>
         <BackgroundCircles parallaxRef={parallaxRef} />
-        <Link to="/" className="absolute top-0 left-0 px-4 py-5 z-10">
-          <Icon name="logo" className="w-8 h-8 text-slate-50" />
-        </Link>
         <img
           src="/assets/metaverse.jpg"
           alt="metaverse"
