@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import type { z } from 'zod';
+
+import { useCreateUserAccount } from '@/api/queries';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -14,17 +16,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { signInFormSchema } from './constants';
-import { useCreateUserAccount } from '@/api/queries';
+
+import { signUpFormSchema } from './constants';
 
 export function SignUp() {
-  const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { mutateAsync: createUserAccount, isPending } = useCreateUserAccount();
+  const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof signInFormSchema>>({
-    resolver: zodResolver(signInFormSchema),
+  const { mutateAsync: createUserAccount, isLoading } = useCreateUserAccount();
+
+  const form = useForm<z.infer<typeof signUpFormSchema>>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       userName: '',
       email: '',
@@ -32,11 +35,11 @@ export function SignUp() {
     },
   });
 
-  const onSubmit = async (user: z.infer<typeof signInFormSchema>) => {
+  const onSubmit = async (user: z.infer<typeof signUpFormSchema>) => {
     try {
       await createUserAccount(user);
       form.reset();
-      navigate('/sign-in');
+      navigate('/auth/sign-in');
     } catch (error) {
       toast({
         title: 'Sign in failed. Please try again.',
@@ -87,8 +90,8 @@ export function SignUp() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending}>
-          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Sign in
         </Button>
       </form>

@@ -1,6 +1,8 @@
 import { ID } from 'appwrite';
+
+import type { DBUser, User } from '@/models';
+
 import { account, appwriteConfig, avatars, databases } from './config';
-import { DBUser, User } from '@/models';
 
 export async function createUserAccount(user: User) {
   try {
@@ -10,7 +12,7 @@ export async function createUserAccount(user: User) {
       user.password
     );
 
-    const avatarUrl = avatars.getInitials();
+    const avatarUrl = avatars.getInitials().toString();
 
     await saveUserToDB({
       accountId: newAccount.$id,

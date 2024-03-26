@@ -7,6 +7,11 @@ export type User = {
 export type DBUser = {
   accountId: string;
   email: string;
-  imageUrl?: URL;
+  imageUrl?: string;
   userName?: string;
+};
+
+export type Contract = {
+  type: string;
+  address: string;
 };

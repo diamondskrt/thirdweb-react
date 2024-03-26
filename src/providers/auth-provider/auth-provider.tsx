@@ -1,12 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
-import { DBUser } from '@/models';
-import { AuthContext } from './constants';
-import { useToast } from '@/components/ui/use-toast';
+
 import { getCurrentUser } from '@/api/auth';
+import { useToast } from '@/components/ui/use-toast';
+import type { DBUser } from '@/models';
+
+import { AuthContext } from './constants';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const [user, setUser] = useState<DBUser | null>(null);
@@ -28,22 +28,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         title: 'Sign up failed. Please try again.',
         description: (error as Error).message,
       });
+
+      localStorage.removeItem('cookieFallback');
     } finally {
       setIsPending(false);
     }
   }, [toast]);
 
   useEffect(() => {
-    const cookieFallback = localStorage.getItem('cookieFallback');
-
-    if (!cookieFallback || cookieFallback === '[]') {
-      navigate('/sign-in');
-
-      return;
-    }
-
     checkAuthUser();
-  }, [checkAuthUser, navigate]);
+  }, [checkAuthUser]);
 
   const value = {
     user,

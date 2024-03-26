@@ -1,4 +1,5 @@
 import { ConnectWallet } from '@thirdweb-dev/react';
+
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/providers/theme-provider';
 
@@ -8,9 +9,9 @@ export function ConnectWalletBtn() {
 
   return (
     <ConnectWallet
-      theme={isLight ? 'dark' : 'light'}
+      theme={isLight ? 'light' : 'dark'}
       btnTitle="Connect Wallet"
-      className="connect-wallet-btn"
+      className="thirdweb-btn"
       detailsBtn={() => {
         return <Button>Profile</Button>;
       }}
