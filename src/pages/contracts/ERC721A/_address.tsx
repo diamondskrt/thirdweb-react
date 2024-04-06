@@ -144,7 +144,7 @@ export function ContractERC721APage() {
                     />
                   ))
                 ) : (
-                  <div>No data</div>
+                  <p>No data</p>
                 )}
               </div>
             </div>

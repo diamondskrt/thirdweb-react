@@ -5,6 +5,7 @@ import type { BaseContract } from 'ethers';
 import { NFTCard } from '@/components/shared/nft-card';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from '@/components/ui/use-toast';
 import { getContractAddress } from '@/lib/helpers';
 
 type StakedNFTCardProps = {
@@ -13,6 +14,7 @@ type StakedNFTCardProps = {
 
 export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
   const ERC721AContractAddress = getContractAddress('ERC721A');
+  const ERC721ContractAddress = getContractAddress('ERC721');
 
   const { contract: ERC721AContract } = useContract(ERC721AContractAddress);
 
@@ -22,8 +24,15 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
     error: isNFTError,
   } = useNFT(ERC721AContract, tokenId);
 
-  const unStakeNft = (contract: SmartContract<BaseContract>) => {
-    contract.call('withdraw', [[tokenId]]);
+  const unStakeNft = async (contract: SmartContract<BaseContract>) => {
+    try {
+      await contract?.call('withdraw', [[tokenId]]);
+    } catch (error) {
+      toast({
+        title: 'Unstake failed. Please try again.',
+        description: (error as Error).message,
+      });
+    }
   };
 
   return isNFTLoading ? (
@@ -44,13 +53,13 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
         </div>
       </CardContent>
     </Card>
-  ) : isNFTError || !(nft && ERC721AContractAddress) ? (
-    <div>Error</div>
+  ) : isNFTError || !(nft && ERC721ContractAddress) ? (
+    <p>Something went wrong...</p>
   ) : (
     <>
       <NFTCard
         nft={nft}
-        contractAddress={ERC721AContractAddress}
+        contractAddress={ERC721ContractAddress}
         btnText="Unstake"
         onAction={unStakeNft}
       />

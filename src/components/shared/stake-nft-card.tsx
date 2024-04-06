@@ -1,5 +1,6 @@
-import type { NFT } from '@thirdweb-dev/react';
+import type { NFT, SmartContract } from '@thirdweb-dev/react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
+import type { BaseContract } from 'ethers';
 
 import { NFTCard } from '@/components/shared/nft-card';
 import { getContractAddress } from '@/lib/helpers';
@@ -19,14 +20,13 @@ export function StakeNFTCard({ nft, hideStakeBtn }: StakeNFTCardProps) {
     ERC721AContractAddress,
     'signature-drop'
   );
-  const { contract: ERC721Contract } = useContract(ERC721ContractAddress);
 
-  const stakeNFT = async () => {
+  const stakeNFT = async (contract: SmartContract<BaseContract>) => {
     if (!(address && ERC721ContractAddress)) return;
 
     const isApproved = await ERC721AContract?.isApproved(
       address,
-      ERC721ContractAddress
+      ERC721ContractAddress!
     );
 
     if (!isApproved) {
@@ -35,13 +35,13 @@ export function StakeNFTCard({ nft, hideStakeBtn }: StakeNFTCardProps) {
 
     const nftIds = [[parseInt(nft.metadata.id)]];
 
-    await ERC721Contract?.call('stake', nftIds);
+    await contract?.call('stake', nftIds);
   };
 
   return (
     <NFTCard
       nft={nft}
-      contractAddress={ERC721AContractAddress!}
+      contractAddress={ERC721ContractAddress!}
       btnText="Stake"
       hideBtn={hideStakeBtn}
       onAction={stakeNFT}
