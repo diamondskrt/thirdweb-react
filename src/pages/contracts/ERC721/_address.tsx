@@ -179,7 +179,7 @@ export function ContractERC721Page() {
                     <StakeNFTCard key={nft.metadata.id} nft={nft} />
                   ))
                 ) : (
-                  <div>No data</div>
+                  <p>No data</p>
                 )}
               </div>
             </div>
@@ -187,10 +187,14 @@ export function ContractERC721Page() {
             <div className="contract-page__nfts">
               <h2 className="text-gradient">Staked NFT's:</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                {stakedERC721ATokens[0].map((token: BigNumber) => {
-                  const tokenId = token.toNumber();
-                  return <StakedNFTCard key={tokenId} tokenId={tokenId} />;
-                })}
+                {stakedERC721ATokens.length ? (
+                  stakedERC721ATokens[0].map((token: BigNumber) => {
+                    const tokenId = token.toNumber();
+                    return <StakedNFTCard key={tokenId} tokenId={tokenId} />;
+                  })
+                ) : (
+                  <p>No data</p>
+                )}
               </div>
             </div>
           </div>
