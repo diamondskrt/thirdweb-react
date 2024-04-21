@@ -112,7 +112,7 @@
   }
 
   .grid-container {
-    @apply flex flex-col gap-8 w-full mx-auto px-4 max-w-[1400px];
+    @apply grid gap-8 w-full mx-auto px-4 max-w-[1400px];
   }
 
   /* start thirdweb styles */

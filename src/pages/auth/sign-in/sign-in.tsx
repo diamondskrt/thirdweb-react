@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 import type { z } from 'zod';
 
 import { useSignInAccount } from '@/api/queries';
@@ -16,10 +17,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import type { DBUser } from '@/models';
 
 import { signInFormSchema } from './constants';
 
 export function SignIn() {
+  const [, setUser] = useLocalStorage<DBUser | null>('user', null);
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -35,7 +39,15 @@ export function SignIn() {
 
   const onSubmit = async (user: z.infer<typeof signInFormSchema>) => {
     try {
-      await signInAccount(user);
+      const currentUser = await signInAccount(user);
+
+      setUser({
+        accountId: currentUser.$id,
+        userName: currentUser.userName,
+        email: currentUser.email,
+        imageUrl: currentUser.imageUrl,
+      });
+
       form.reset();
       navigate('/');
     } catch (error) {

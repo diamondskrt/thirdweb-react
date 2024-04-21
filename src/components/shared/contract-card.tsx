@@ -1,24 +1,51 @@
 import { useContract, useContractMetadata } from '@thirdweb-dev/react';
+import type { Models } from 'appwrite';
 import { Link } from 'react-router-dom';
 
+import { ContractCardSkeleton } from '@/components/shared/contract-card-skeleton';
 import { Card, CardContent, CardDescription } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import type { Contract } from '@/models';
 
 export interface ContractCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  contract: Contract;
+  isDemoUser: boolean;
+  contract: Models.Document;
 }
 
-export function ContractCard({ contract, className }: ContractCardProps) {
-  const { contract: twContract } = useContract(contract.address);
-  const { data: contractMetadata } = useContractMetadata(twContract);
+export function ContractCard({
+  isDemoUser,
+  contract,
+  className,
+}: ContractCardProps) {
+  const {
+    contract: twContract,
+    isLoading: isContractLoading,
+    isError: isContractError,
+  } = useContract(contract.address);
 
-  return contractMetadata ? (
+  const {
+    data: contractMetadata,
+    isLoading: isMetadataLoading,
+    isError: isMetadataError,
+  } = useContractMetadata(twContract);
+
+  const getPathName = () => {
+    return isDemoUser
+      ? `/demo-contracts/${contract.type}/${contract.address}`
+      : `/contracts/${contract.type}/${contract.address}`;
+  };
+
+  const isLoading = isMetadataLoading || isContractLoading;
+  const isError = isMetadataError || isContractError;
+
+  return isLoading ? (
+    <ContractCardSkeleton />
+  ) : isError ? (
+    <p>Something went wrong...</p>
+  ) : (
     <Card className={className}>
       <Link
         to={{
-          pathname: `/contracts/${contract.type}/${contract.address}`,
+          pathname: getPathName(),
         }}
       >
         <div className="relative h-[300px]">
@@ -31,29 +58,12 @@ export function ContractCard({ contract, className }: ContractCardProps) {
         <CardContent>
           <div className="pt-4">
             <h4>{contractMetadata.name}</h4>
-            <CardDescription className="mt-2">
+            <CardDescription className="truncate mt-2">
               {contractMetadata.description}
             </CardDescription>
           </div>
         </CardContent>
       </Link>
-    </Card>
-  ) : (
-    <Card>
-      <div className="relative h-[300px]">
-        <Skeleton
-          isRounded={false}
-          className="w-full h-full object-cover rounded-t-lg"
-        />
-      </div>
-      <CardContent>
-        <div className="pt-4">
-          <Skeleton className="h-4 w-1/2 mt-2" />
-          <Skeleton className="h-2 w-full mt-4" />
-          <Skeleton className="h-2 w-4/5 mt-2" />
-          <Skeleton className="h-2 w-1/2 mt-2" />
-        </div>
-      </CardContent>
     </Card>
   );
 }

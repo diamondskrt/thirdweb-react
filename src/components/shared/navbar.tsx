@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
-import { useEventListener, useDebounceCallback } from 'usehooks-ts';
+import { useDebounceCallback, useEventListener } from 'usehooks-ts';
 
 import { ConnectWalletBtn } from '@/components/shared/connect-wallet-btn';
 import { Icon } from '@/components/shared/icon';

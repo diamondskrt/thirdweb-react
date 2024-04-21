@@ -1,4 +1,4 @@
-import { ID } from 'appwrite';
+import { ID, Query } from 'appwrite';
 
 import type { DBUser, User } from '@/models';
 
@@ -29,7 +29,7 @@ export async function saveUserToDB(user: DBUser) {
   try {
     await databases.createDocument(
       appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId,
+      appwriteConfig.usersCollectionId,
       ID.unique(),
       user
     );
@@ -40,7 +40,9 @@ export async function saveUserToDB(user: DBUser) {
 
 export async function signInAccount(user: Omit<User, 'userName'>) {
   try {
-    await account.createEmailPasswordSession(user.email, user.password);
+    await account.createEmailSession(user.email, user.password);
+    const currentUser = await getCurrentUser();
+    return currentUser;
   } catch (error) {
     throw new Error((error as Error).message);
   }
@@ -66,12 +68,12 @@ export async function getAccount() {
 
 export async function getCurrentUser() {
   try {
-    // const currentAccount = await getAccount();
+    const currentAccount = await getAccount();
 
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.userCollectionId
-      // [Query.equal('accountId', currentAccount.$id)]
+      appwriteConfig.usersCollectionId,
+      [Query.equal('accountId', [currentAccount.$id])]
     );
 
     return currentUser.documents[0];

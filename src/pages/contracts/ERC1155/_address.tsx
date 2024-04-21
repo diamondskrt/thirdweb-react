@@ -13,8 +13,9 @@ import { Link, useParams } from 'react-router-dom';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { StakeNFTCard } from '@/components/shared/stake-nft-card';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
+import { ContractTypes } from '@/models';
 
-export function ContractERC1155APage() {
+export function ContractERC1155Page() {
   const { address: contractAddress } = useParams();
   const { contract } = useContract(contractAddress, 'edition-drop');
   const address = useAddress();
@@ -58,7 +59,7 @@ export function ContractERC1155APage() {
       link: '/',
     },
     {
-      title: 'ERC1155',
+      title: ContractTypes.ERC1155,
     },
   ];
 
@@ -139,7 +140,7 @@ export function ContractERC1155APage() {
                     <StakeNFTCard
                       key={nft.metadata.id}
                       nft={nft}
-                      hideStakeBtn={false}
+                      hideStakeBtn
                     />
                   ))
                 ) : (
