@@ -9,18 +9,29 @@ import {
 import { Loader2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
+import { useGetContractAddresses } from '@/api/queries';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
-import { getContractAddress } from '@/lib/helpers';
+import { ContractTypes } from '@/models';
 
 export function ContractERC20Page() {
   const { address: contractAddress } = useParams();
   const { contract } = useContract(contractAddress);
   const address = useAddress();
 
-  const ERC721ContractAddress = getContractAddress('ERC721');
-  const ERC721AContractAddress = getContractAddress('ERC721A');
+  const [
+    {
+      data: ERC721ContractAddress,
+      isLoading: isERC721Loading,
+      isError: isERC721Error,
+    },
+    {
+      data: ERC721AContractAddress,
+      isLoading: isERC721ALoading,
+      isError: isERC721AError,
+    },
+  ] = useGetContractAddresses([ContractTypes.ERC721, ContractTypes.ERC721A]);
 
   const {
     data: contractMetadata,
@@ -40,8 +51,19 @@ export function ContractERC20Page() {
     error: isBalanceError,
   } = useTokenBalance(contract, address);
 
-  const isLoading = isContractLoading || isSupplyLoading || isBalanceLoading;
-  const isError = isContractError || isSupplyError || isBalanceError;
+  const isLoading =
+    isERC721Loading ||
+    isERC721ALoading ||
+    isContractLoading ||
+    isSupplyLoading ||
+    isBalanceLoading;
+
+  const isError =
+    isERC721Error ||
+    isERC721AError ||
+    isContractError ||
+    isSupplyError ||
+    isBalanceError;
 
   const breadcrumbs = [
     {
@@ -49,7 +71,7 @@ export function ContractERC20Page() {
       link: '/',
     },
     {
-      title: 'ERC20',
+      title: ContractTypes.ERC20,
     },
   ];
 

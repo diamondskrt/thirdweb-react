@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { LogOut, FileCode, Settings } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LogOut, Plus } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { useSignOutAccount } from '@/api/queries';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,22 +15,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useUserContext } from '@/providers/auth-provider';
+import type { DBUser } from '@/models';
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, isPending } = useUserContext();
+  const [user, setUser] = useLocalStorage<DBUser | null>('user', null);
 
   const { mutate: signOut, isSuccess } = useSignOutAccount();
 
   useEffect(() => {
     if (!isSuccess) return;
-    navigate('/auth/sign-in');
-  }, [isSuccess, navigate, user, isPending]);
 
-  return isPending ? (
-    <Button variant="outline">Loading...</Button>
-  ) : (
+    setUser(null);
+    navigate('/auth/sign-in');
+  }, [isSuccess, navigate, setUser]);
+
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
@@ -53,14 +53,12 @@ export function Profile() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <FileCode className="mr-2 h-4 w-4" />
-            <span>My Contracts</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
+          <Link to="/add-contract">
+            <DropdownMenuItem>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>Add Contract</span>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

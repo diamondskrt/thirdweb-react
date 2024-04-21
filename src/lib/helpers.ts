@@ -1,7 +1,7 @@
-import { contracts } from '@/constants';
+import type { DBUser } from '@/models';
 
-export const getContractAddress = (contractType: string) => {
-  const foundedContract = contracts.find(({ type }) => type === contractType);
+const isDemoUserId = import.meta.env.VITE_DEMO_USER_ID;
 
-  return foundedContract?.address;
+export const isDemoUser = (user: DBUser | null) => {
+  return user?.accountId === isDemoUserId;
 };

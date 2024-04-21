@@ -14,24 +14,36 @@ import { ethers } from 'ethers';
 import { Loader2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
+import { useGetContractAddresses } from '@/api/queries';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { StakeNFTCard } from '@/components/shared/stake-nft-card';
 import { StakedNFTCard } from '@/components/shared/staked-nft-card';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
-import { getContractAddress } from '@/lib/helpers';
+import { ContractTypes } from '@/models';
 
 export function ContractERC721Page() {
-  const [isClaimableRewards, setIsClaimableRewards] = useState<BigNumber>();
+  const [isClaimableRewards, setIsClaimableRewards] =
+    useState<BigNumber | null>(null);
   const { address: contractAddress } = useParams();
 
-  const ERC20ContractAddress = getContractAddress('ERC20');
-  const ERC721АContractAddress = getContractAddress('ERC721A');
+  const [
+    {
+      data: ERC20ContractAddress,
+      isLoading: isERC20Loading,
+      isError: isERC20Error,
+    },
+    {
+      data: ERC721AContractAddress,
+      isLoading: isERC721ALoading,
+      isError: isERC721AError,
+    },
+  ] = useGetContractAddresses([ContractTypes.ERC20, ContractTypes.ERC721A]);
 
   const { contract } = useContract(contractAddress);
   const { contract: ERC20Contract } = useContract(ERC20ContractAddress);
-  const { contract: ERC721АContract } = useContract(
-    ERC721АContractAddress,
+  const { contract: ERC721AContract } = useContract(
+    ERC721AContractAddress,
     'signature-drop'
   );
 
@@ -58,6 +70,13 @@ export function ContractERC721Page() {
     getClaimableRewards();
   }, [getClaimableRewards]);
 
+  const onClaimRewardsSuccess = () => {
+    toast({
+      title: 'Claim reward request was successful!',
+    });
+    setIsClaimableRewards(ethers.constants.Zero);
+  };
+
   const {
     data: contractMetadata,
     isLoading: isContractLoading,
@@ -74,7 +93,7 @@ export function ContractERC721Page() {
     data: ownedNFTs,
     isLoading: isNFTLoading,
     error: isNFTError,
-  } = useOwnedNFTs(ERC721АContract, address);
+  } = useOwnedNFTs(ERC721AContract, address);
 
   const {
     data: stakedERC721ATokens,
@@ -83,10 +102,20 @@ export function ContractERC721Page() {
   } = useContractRead(contract, 'getStakeInfo', [address]);
 
   const isLoading =
-    isContractLoading || isBalanceLoading || isNFTLoading || isTokensLoading;
+    isERC20Loading ||
+    isERC721ALoading ||
+    isContractLoading ||
+    isBalanceLoading ||
+    isNFTLoading ||
+    isTokensLoading;
 
   const isError =
-    isContractError || isBalanceError || isNFTError || isTokensError;
+    isERC20Error ||
+    isERC721AError ||
+    isContractError ||
+    isBalanceError ||
+    isNFTError ||
+    isTokensError;
 
   const breadcrumbs = [
     {
@@ -94,16 +123,9 @@ export function ContractERC721Page() {
       link: '/',
     },
     {
-      title: 'ERC721',
+      title: ContractTypes.ERC721,
     },
   ];
-
-  const onClaimRewardsSuccess = () => {
-    toast({
-      title: 'Claim reward request was successful!',
-    });
-    setIsClaimableRewards(ethers.constants.Zero);
-  };
 
   return (
     <>

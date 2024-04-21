@@ -25,14 +25,26 @@ module.exports = {
     "no-console": ['warn', { allow: ['warn', 'error'] }],
     "no-duplicate-imports": "off",
     "import/no-duplicates": "error",
+    'sort-imports': [
+      'error',
+      {
+        ignoreCase: false,
+        ignoreDeclarationSort: true,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+        allowSeparatedGroups: true,
+      },
+    ],
     'import/order': [
       'error',
       {
         groups: [
-          ['external', 'builtin'],
+          'builtin',
+          'external',
           'internal',
           ['sibling', 'parent'],
           'index',
+          'unknown',
         ],
         pathGroups: [
           {

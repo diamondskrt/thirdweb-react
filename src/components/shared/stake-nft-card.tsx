@@ -2,8 +2,10 @@ import type { NFT, SmartContract } from '@thirdweb-dev/react';
 import { useAddress, useContract } from '@thirdweb-dev/react';
 import type { BaseContract } from 'ethers';
 
+import { useGetContractAddresses } from '@/api/queries';
 import { NFTCard } from '@/components/shared/nft-card';
-import { getContractAddress } from '@/lib/helpers';
+import { NFTCardSkeleton } from '@/components/shared/nft-card-skeleton';
+import { ContractTypes } from '@/models';
 
 type StakeNFTCardProps = {
   nft: NFT;
@@ -11,8 +13,21 @@ type StakeNFTCardProps = {
 };
 
 export function StakeNFTCard({ nft, hideStakeBtn }: StakeNFTCardProps) {
-  const ERC721AContractAddress = getContractAddress('ERC721A');
-  const ERC721ContractAddress = getContractAddress('ERC721');
+  const [
+    {
+      data: ERC721ContractAddress,
+      isLoading: isERC721Loading,
+      isError: isERC721Error,
+    },
+    {
+      data: ERC721AContractAddress,
+      isLoading: isERC721ALoading,
+      isError: isERC721AError,
+    },
+  ] = useGetContractAddresses([ContractTypes.ERC721, ContractTypes.ERC721A]);
+
+  const isLoading = isERC721Loading || isERC721ALoading;
+  const isError = isERC721Error || isERC721AError;
 
   const address = useAddress();
 
@@ -38,10 +53,14 @@ export function StakeNFTCard({ nft, hideStakeBtn }: StakeNFTCardProps) {
     await contract?.call('stake', nftIds);
   };
 
-  return (
+  return isLoading ? (
+    <NFTCardSkeleton />
+  ) : isError ? (
+    <p>Something went wrong...</p>
+  ) : (
     <NFTCard
       nft={nft}
-      contractAddress={ERC721ContractAddress!}
+      contractAddress={ERC721ContractAddress}
       btnText="Stake"
       hideBtn={hideStakeBtn}
       onAction={stakeNFT}

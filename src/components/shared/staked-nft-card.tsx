@@ -2,19 +2,29 @@ import type { SmartContract } from '@thirdweb-dev/react';
 import { useContract, useNFT } from '@thirdweb-dev/react';
 import type { BaseContract } from 'ethers';
 
+import { useGetContractAddresses } from '@/api/queries';
 import { NFTCard } from '@/components/shared/nft-card';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { NFTCardSkeleton } from '@/components/shared/nft-card-skeleton';
 import { toast } from '@/components/ui/use-toast';
-import { getContractAddress } from '@/lib/helpers';
+import { ContractTypes } from '@/models';
 
 type StakedNFTCardProps = {
   tokenId: number;
 };
 
 export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
-  const ERC721AContractAddress = getContractAddress('ERC721A');
-  const ERC721ContractAddress = getContractAddress('ERC721');
+  const [
+    {
+      data: ERC721ContractAddress,
+      isLoading: isERC721Loading,
+      isError: isERC721Error,
+    },
+    {
+      data: ERC721AContractAddress,
+      isLoading: isERC721ALoading,
+      isError: isERC721AError,
+    },
+  ] = useGetContractAddresses([ContractTypes.ERC721, ContractTypes.ERC721A]);
 
   const { contract: ERC721AContract } = useContract(ERC721AContractAddress);
 
@@ -23,6 +33,9 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
     isLoading: isNFTLoading,
     error: isNFTError,
   } = useNFT(ERC721AContract, tokenId);
+
+  const isLoading = isERC721Loading || isERC721ALoading || isNFTLoading;
+  const isError = isERC721Error || isERC721AError || isNFTError;
 
   const unStakeNft = async (contract: SmartContract<BaseContract>) => {
     try {
@@ -35,30 +48,14 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
     }
   };
 
-  return isNFTLoading ? (
-    <Card>
-      <div className="relative h-[300px]">
-        <Skeleton
-          isRounded={false}
-          className="w-full h-full object-cover rounded-t-lg"
-        />
-      </div>
-      <CardContent>
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 p-4">
-          <Skeleton className="h-6 w-1/4" />
-          <Skeleton
-            className="rounded-3xl h-10 w-full sm:w-[66px]"
-            isRounded={false}
-          />
-        </div>
-      </CardContent>
-    </Card>
-  ) : isNFTError || !(nft && ERC721ContractAddress) ? (
+  return isLoading ? (
+    <NFTCardSkeleton />
+  ) : isError ? (
     <p>Something went wrong...</p>
   ) : (
     <>
       <NFTCard
-        nft={nft}
+        nft={nft!}
         contractAddress={ERC721ContractAddress}
         btnText="Unstake"
         onAction={unStakeNft}
