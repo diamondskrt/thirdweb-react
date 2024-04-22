@@ -6,6 +6,7 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { NFTDemoCard } from '@/components/shared/nft-demo-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
+import type { DemoNFT } from '@/models';
 import { ContractTypes } from '@/models';
 
 export function ContractERC1155DemoPage() {
@@ -79,7 +80,9 @@ export function ContractERC1155DemoPage() {
                 <Card>
                   <CardHeader>
                     <h5>Your NFT</h5>
-                    <p>Total Owned: {contractMetadata?.nfts.length}</p>
+                    <p>
+                      Total Owned: {contractMetadata?.nfts.length || 'No data'}
+                    </p>
                   </CardHeader>
                 </Card>
               </div>
@@ -89,7 +92,7 @@ export function ContractERC1155DemoPage() {
               <h2 className="text-gradient">My NFT's:</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                 {contractMetadata?.nfts.length ? (
-                  contractMetadata?.nfts.map((nft) => (
+                  contractMetadata?.nfts.map((nft: DemoNFT) => (
                     <NFTDemoCard key={nft.$id} nft={nft} />
                   ))
                 ) : (

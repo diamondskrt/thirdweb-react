@@ -11,7 +11,8 @@ export function ContractLayout() {
   const [user] = useLocalStorage<DBUser | null>('user', null);
   const navigate = useNavigate();
   const connectionStatus = useConnectionStatus();
-  const isWalletPending = connectionStatus === 'unknown';
+  const isWalletPending =
+    connectionStatus === 'unknown' || connectionStatus === 'connecting';
   const isWalletConnected = connectionStatus === 'connected';
 
   useEffect(() => {

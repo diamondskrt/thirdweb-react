@@ -7,7 +7,8 @@ import {
   addContract,
   getContractAddress,
   getContractByAddress,
-  getContracts,
+  getNFTs,
+  getUserContracts,
 } from './contracts';
 import { QUERY_KEYS } from './model';
 
@@ -37,10 +38,17 @@ export const useGetContractByAddress = (address?: string) => {
   });
 };
 
-export const useGetContracts = (userId: string) => {
+export const useGetUserContracts = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_CONTRACTS],
-    queryFn: () => getContracts(userId),
+    queryFn: () => getUserContracts(userId),
+  });
+};
+
+export const useGetNFTs = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_CONTRACTS],
+    queryFn: () => getNFTs(),
   });
 };
 

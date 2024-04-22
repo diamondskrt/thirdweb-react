@@ -4,7 +4,7 @@ import type { ContractPayload } from '@/models';
 
 import { appwriteConfig, databases } from './config';
 
-export async function getContracts(userId: string) {
+export async function getUserContracts(userId: string) {
   try {
     const contracts = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -13,6 +13,19 @@ export async function getContracts(userId: string) {
     );
 
     return contracts.documents;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+}
+
+export async function getNFTs() {
+  try {
+    const NFTs = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.NFTsCollectionId
+    );
+
+    return NFTs.documents;
   } catch (error) {
     throw new Error((error as Error).message);
   }

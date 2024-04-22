@@ -9,9 +9,10 @@ export function DefaultLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const user = localStorage.getItem('user');
     const cookieFallback = localStorage.getItem('cookieFallback');
 
-    if (!cookieFallback || cookieFallback === '[]') {
+    if (!cookieFallback || cookieFallback === '[]' || !user) {
       navigate('/auth/sign-in');
     }
   }, [navigate]);

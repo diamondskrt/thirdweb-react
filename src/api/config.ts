@@ -7,6 +7,7 @@ export const appwriteConfig = {
   storageId: import.meta.env.VITE_APPWRITE_STORAGE_ID,
   usersCollectionId: import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
   contractsCollectionId: import.meta.env.VITE_APPWRITE_CONTRACTS_COLLECTION_ID,
+  NFTsCollectionId: import.meta.env.VITE_APPWRITE_NFTS_COLLECTION_ID,
 };
 
 export const client = new Client();
