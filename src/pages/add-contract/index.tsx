@@ -33,19 +33,14 @@ export function AddContractPage() {
   const { mutateAsync: addContract, isLoading } = useAddContract();
 
   const onSubmit = async (contract: z.infer<typeof formSchema>) => {
-    if (!user) {
-      toast({
-        title: 'Something went wrong...',
-      });
-
-      return;
-    }
+    if (!user) return;
 
     try {
-      await addContract({ userId: user?.accountId, ...contract });
+      await addContract({ userId: user.accountId, ...contract });
       toast({
         title: 'The contract was added successfully',
       });
+      form.reset();
     } catch (error) {
       toast({
         title: 'Add contract failed. Please try again.',

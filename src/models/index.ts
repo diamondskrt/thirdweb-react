@@ -28,3 +28,9 @@ export enum ContractTypes {
   ERC20 = 'ERC20',
   ERC1155 = 'ERC1155',
 }
+
+export type DemoNFT = {
+  $id: string;
+  image: string;
+  title: string;
+};

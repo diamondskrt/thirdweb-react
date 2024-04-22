@@ -6,7 +6,7 @@ import { Loader2, Plus, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { getContracts } from '@/api/contracts';
+import { getUserContracts } from '@/api/contracts';
 import { ContractCard } from '@/components/shared/contract-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from '@/components/ui/use-toast';
@@ -25,7 +25,7 @@ export function HomePage() {
 
   const onGetContracts = async (userId: string) => {
     try {
-      const currentContracts = await getContracts(userId);
+      const currentContracts = await getUserContracts(userId);
       setContracts(currentContracts);
     } catch (error) {
       toast({
@@ -41,6 +41,7 @@ export function HomePage() {
 
   useEffect(() => {
     if (!user?.accountId) return;
+
     onGetContracts(user.accountId);
   }, [user]);
 

@@ -50,16 +50,14 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
 
   return isLoading ? (
     <NFTCardSkeleton />
-  ) : isError ? (
+  ) : isError || !nft ? (
     <p>Something went wrong...</p>
   ) : (
-    <>
-      <NFTCard
-        nft={nft!}
-        contractAddress={ERC721ContractAddress}
-        btnText="Unstake"
-        onAction={unStakeNft}
-      />
-    </>
+    <NFTCard
+      nft={nft}
+      contractAddress={ERC721ContractAddress}
+      btnText="Unstake"
+      onAction={unStakeNft}
+    />
   );
 }

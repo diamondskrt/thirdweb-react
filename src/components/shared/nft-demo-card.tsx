@@ -1,13 +1,12 @@
+import type { Models } from 'appwrite';
+
+import type { DemoNFT } from '@/models';
+
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 
-interface NFT {
-  image: string;
-  title: string;
-}
-
 interface NFTDemoCardProps {
-  nft: NFT;
+  nft: DemoNFT | Models.Document;
   showStakeBtn?: boolean;
 }
 
