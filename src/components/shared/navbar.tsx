@@ -39,7 +39,7 @@ export function Navbar() {
           className="flex items-center gap-2 text-black dark:text-white"
         >
           <Icon name="logo" className="w-10 h-10" />
-          <h4 className="uppercase font-bold">Metaverse</h4>
+          <h4 className="hidden md:block uppercase font-bold">Metaverse</h4>
         </Link>
         <div className="flex items-center gap-2">
           <ThemeSwitcher />

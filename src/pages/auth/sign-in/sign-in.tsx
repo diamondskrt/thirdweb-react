@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import type { z } from 'zod';
 
@@ -87,10 +87,18 @@ export function SignIn() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Sign in
-        </Button>
+        <div className="flex flex-col md:flex-row items-center gap-2">
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Sign in
+          </Button>
+          <div className="flex gap-2">
+            <p>No account?</p>
+            <Link to="/auth/sign-up">
+              <p className="text-primary">Sign Up</p>
+            </Link>
+          </div>
+        </div>
       </form>
     </Form>
   );

@@ -8,8 +8,8 @@ export function AuthLayout() {
   const parallaxRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="flex h-svh">
-      <div className="relative w-[60%] h-full" ref={parallaxRef}>
+    <div className="flex flex-col md:flex-row h-svh">
+      <div className="relative w-full md:w-[60%] h-full" ref={parallaxRef}>
         <BackgroundCircles parallaxRef={parallaxRef} />
         <img
           src="/assets/images/metaverse.jpg"
@@ -17,7 +17,7 @@ export function AuthLayout() {
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="flex flex-1 flex-center px-4">
+      <div className="flex flex-1 flex-center p-4">
         <div className="w-full lg:w-8/12">
           <Outlet />
         </div>
