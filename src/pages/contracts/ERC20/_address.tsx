@@ -97,7 +97,9 @@ export function ContractERC20Page() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2 h-[450px]">
                   <img
-                    src={contractMetadata?.image || '/assets/metaverse.jpg'}
+                    src={
+                      contractMetadata?.image || '/assets/images/metaverse.jpg'
+                    }
                     alt={contractMetadata?.name}
                     className="w-full h-full object-cover rounded-t-lg"
                   />

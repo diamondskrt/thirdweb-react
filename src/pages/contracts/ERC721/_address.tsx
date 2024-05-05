@@ -101,14 +101,6 @@ export function ContractERC721Page() {
     error: isTokensError,
   } = useContractRead(contract, 'getStakeInfo', [address]);
 
-  const isLoading =
-    isERC20Loading ||
-    isERC721ALoading ||
-    isContractLoading ||
-    isBalanceLoading ||
-    isNFTLoading ||
-    isTokensLoading;
-
   const isError =
     isERC20Error ||
     isERC721AError ||
@@ -116,6 +108,15 @@ export function ContractERC721Page() {
     isBalanceError ||
     isNFTError ||
     isTokensError;
+
+  const isLoading =
+    (isERC20Loading ||
+      isERC721ALoading ||
+      isContractLoading ||
+      isBalanceLoading ||
+      isNFTLoading ||
+      isTokensLoading) &&
+    !isError;
 
   const breadcrumbs = [
     {
@@ -149,7 +150,9 @@ export function ContractERC721Page() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2 h-[450px]">
                   <img
-                    src={contractMetadata?.image || '/assets/metaverse.jpg'}
+                    src={
+                      contractMetadata?.image || '/assets/images/metaverse.jpg'
+                    }
                     alt={contractMetadata?.name}
                     className="w-full h-full object-cover rounded-t-lg"
                   />

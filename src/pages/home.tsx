@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useConnectionStatus } from '@thirdweb-dev/react';
-import type { Models } from 'appwrite';
 import { Loader2, Plus, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 
-import { getUserContracts } from '@/api/contracts';
+import { useDeleteContract, useGetUserContracts } from '@/api/queries';
+import { ConfirmDialog } from '@/components/shared/confirm-dialog';
 import { ContractCard } from '@/components/shared/contract-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from '@/components/ui/use-toast';
@@ -20,30 +20,35 @@ export function HomePage() {
   const connectionStatus = useConnectionStatus();
   const isWalletNotConnected = connectionStatus === 'disconnected';
 
-  const [contracts, setContracts] = useState<Models.Document[]>([]);
-  const [isContractsPending, setIsContractsPending] = useState(true);
+  const [deleteContractId, setDeleteContractId] = useState<string | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
-  const onGetContracts = async (userId: string) => {
-    try {
-      const currentContracts = await getUserContracts(userId);
-      setContracts(currentContracts);
-    } catch (error) {
-      toast({
-        title: 'Get contracts failed. Please try again.',
-        description: (error as Error).message,
-      });
-    } finally {
-      setIsContractsPending(false);
-    }
+  const { mutateAsync: deleteContract, isLoading: isDeleteContractLoading } =
+    useDeleteContract();
+
+  const { data: contracts, isLoading: isContractsLoading } =
+    useGetUserContracts(user?.accountId);
+
+  const isLoading = isContractsLoading;
+
+  const onConfirmDialogOpen = (contractId: string) => {
+    setDeleteContractId(contractId);
+    setConfirmDialogOpen(true);
   };
 
-  const isLoading = isContractsPending;
+  const onDeleteContract = async () => {
+    if (!deleteContractId) return;
 
-  useEffect(() => {
-    if (!user?.accountId) return;
-
-    onGetContracts(user.accountId);
-  }, [user]);
+    try {
+      await deleteContract(deleteContractId);
+      setConfirmDialogOpen(false);
+    } catch (error) {
+      toast({
+        title: 'Delete contract failed. Please try again.',
+        description: (error as Error).message,
+      });
+    }
+  };
 
   return (
     <div className="home-page page-paddings">
@@ -67,20 +72,32 @@ export function HomePage() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading...
               </div>
             ) : contracts?.length ? (
-              contracts.map((contract) => (
-                <ContractCard
-                  key={contract.address}
-                  isDemoUser={isDemoUser(user)}
-                  contract={contract}
-                  className={cn({
-                    disabled: isWalletNotConnected && !isDemoUser(user),
-                  })}
+              <>
+                {contracts.map((contract) => (
+                  <ContractCard
+                    key={contract.address}
+                    isDemoUser={isDemoUser(user)}
+                    contract={contract}
+                    className={cn({
+                      disabled: isWalletNotConnected && !isDemoUser(user),
+                    })}
+                    onDeleteContract={onConfirmDialogOpen}
+                  />
+                ))}
+                <ConfirmDialog
+                  open={confirmDialogOpen}
+                  setOpen={setConfirmDialogOpen}
+                  title="Confirm the action"
+                  description="Are you sure you want to delete this contract?"
+                  loading={isDeleteContractLoading}
+                  onCancel={() => setConfirmDialogOpen(false)}
+                  onOk={onDeleteContract}
                 />
-              ))
+              </>
             ) : (
               <div className="grid gap-4">
                 <div>You don't have smart contracts yet</div>
-                <Link to="add-contract">
+                <Link to="/add-contract">
                   <div className="flex items-center">
                     <Plus className="mr-2 h-4 w-4" />
                     <span>Add Contract</span>
