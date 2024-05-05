@@ -1,30 +1,72 @@
-# React + TypeScript + Vite
+# Web3 Blockchain App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+See demo here: [https://thirdweb-react-six.vercel.app/](https://thirdweb-react-six.vercel.app/)
 
-Currently, two official plugins are available:
+![thirdweb-react](https://github.com/diamondskrt/thirdweb-react/blob/main/public/assets/images/cover.png?raw=true)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📋 <a name="table">Table of Contents</a>
 
-## Expanding the ESLint configuration
+1. 🤖 [Introduction](#introduction)
+2. 🚀 [Tech Stack](#tech-stack)
+3. 🚨 [Features](#features)
+4. 🕸️ [Getting Started](#getting-started)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## <a name="introduction">🤖 Introduction</a>
 
-- Configure the top-level `parserOptions` property like this:
+Built on React 18 and Thirdweb, the Web3 Blockchain application. With a stunning design, connected to the blockchain, metamask pairing, interaction with smart contracts, sending Ethereum through the blockchain network, and writing solidity code.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## <a name="tech-stack">🚀 Tech Stack</a>
+
+- React 18
+- Thirdweb
+- Appwrite
+- TanStack Query
+- TypeScript
+- Shadcn
+- TailwindCSS
+- Zod
+- React Hook Form
+
+## <a name="features">🚨 Features</a>
+
+**Authentication (CRUD) with Appwrite:** User management through Appwrite, ensuring secure and efficient authentication.
+**Contracts (CRUD):** Comprehensive functionality for creating, reading, updating, and deleting contracts, giving users full control over contracts management.
+- **Create Contracts:** Users can effortlessly generate new contracts, providing essential details such as address, type.
+- **Read Contracts:** Seamless access to a detailed view of all contracts, allowing users to explore contract specifics, including descriptions, schedules, and related information.
+- **Update Contracts:** Empowering users to modify contract details dynamically, ensuring that contract information remains accurate and up-to-date.
+- **Delete Contracts:** A straightforward process for removing contracts from the system, giving users the ability to manage and curate the platform effectively.
+
+
+## <a name="getting-started">🚨 Getting Started</a>
+
+## Install the dependencies
+
+```bash
+yarn
+# or
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Start the app in development mode
+
+```bash
+yarn dev
+# or
+npm run dev
+```
+
+### Lint the files
+
+```bash
+yarn lint
+# or
+npm run lint
+```
+
+### Build the app for production
+
+```bash
+yarn build
+# or
+npm run build
+```
