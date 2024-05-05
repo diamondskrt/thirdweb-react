@@ -34,8 +34,10 @@ export function StakedNFTCard({ tokenId }: StakedNFTCardProps) {
     error: isNFTError,
   } = useNFT(ERC721AContract, tokenId);
 
-  const isLoading = isERC721Loading || isERC721ALoading || isNFTLoading;
   const isError = isERC721Error || isERC721AError || isNFTError;
+
+  const isLoading =
+    (isERC721Loading || isERC721ALoading || isNFTLoading) && !isError;
 
   const unStakeNft = async (contract: SmartContract<BaseContract>) => {
     try {

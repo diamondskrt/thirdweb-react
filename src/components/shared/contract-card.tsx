@@ -3,18 +3,21 @@ import type { Models } from 'appwrite';
 import { Link } from 'react-router-dom';
 
 import { ContractCardSkeleton } from '@/components/shared/contract-card-skeleton';
+import { ContractErrorCard } from '@/components/shared/contract-error-card';
 import { Card, CardContent, CardDescription } from '@/components/ui/card';
 
 export interface ContractCardProps
   extends React.HTMLAttributes<HTMLDivElement> {
   isDemoUser: boolean;
   contract: Models.Document;
+  onDeleteContract: (contractId: string) => void;
 }
 
 export function ContractCard({
   isDemoUser,
   contract,
   className,
+  onDeleteContract,
 }: ContractCardProps) {
   const {
     contract: twContract,
@@ -30,17 +33,20 @@ export function ContractCard({
 
   const getPathName = () => {
     return isDemoUser
-      ? `/demo-contracts/${contract.type}/${contract.address}`
+      ? `/demo-contracts/${contract.type}/${contract.$id}`
       : `/contracts/${contract.type}/${contract.address}`;
   };
 
-  const isLoading = isMetadataLoading || isContractLoading;
   const isError = isMetadataError || isContractError;
+  const isLoading = (isMetadataLoading || isContractLoading) && !isError;
 
   return isLoading ? (
     <ContractCardSkeleton />
-  ) : isError ? (
-    <p>Something went wrong...</p>
+  ) : isError || !contractMetadata ? (
+    <ContractErrorCard
+      contract={contract}
+      onDeleteContract={onDeleteContract}
+    />
   ) : (
     <Card className={className}>
       <Link

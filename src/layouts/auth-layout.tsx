@@ -12,7 +12,7 @@ export function AuthLayout() {
       <div className="relative w-[60%] h-full" ref={parallaxRef}>
         <BackgroundCircles parallaxRef={parallaxRef} />
         <img
-          src="/assets/metaverse.jpg"
+          src="/assets/images/metaverse.jpg"
           alt="metaverse"
           className="w-full h-full object-cover"
         />

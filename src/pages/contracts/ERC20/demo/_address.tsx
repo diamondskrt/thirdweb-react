@@ -1,23 +1,20 @@
 import { Loader2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
-import {
-  useGetContractAddresses,
-  useGetContractByAddress,
-} from '@/api/queries';
+import { useGetContractAddresses, useGetContractById } from '@/api/queries';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { ContractTypes } from '@/models';
 
 export function ContractERC20DemoPage() {
-  const { address: contractAddress } = useParams();
+  const { id: contractId } = useParams();
 
   const {
     data: contractMetadata,
     isLoading: isContractLoading,
     isError: isContractError,
-  } = useGetContractByAddress(contractAddress);
+  } = useGetContractById(contractId);
 
   const [
     {
@@ -67,7 +64,7 @@ export function ContractERC20DemoPage() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2 h-[450px]">
                   <img
-                    src={contractMetadata?.image || '/assets/metaverse.jpg'}
+                    src="/assets/images/erc20.jpg"
                     alt={contractMetadata?.name}
                     className="w-full h-full object-cover rounded-t-lg"
                   />
@@ -89,11 +86,9 @@ export function ContractERC20DemoPage() {
                     <h5>Token Balance</h5>
                     <p>Balance: 900000.0 TWTOKEN</p>
                   </CardHeader>
-                  {contractAddress && (
-                    <CardFooter>
-                      <Button disabled>Burn 10 tokens</Button>
-                    </CardFooter>
-                  )}
+                  <CardFooter>
+                    <Button disabled>Burn 10 tokens</Button>
+                  </CardFooter>
                 </Card>
                 <Card>
                   <CardHeader>

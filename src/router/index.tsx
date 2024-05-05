@@ -4,10 +4,10 @@ import { AuthLayout } from '@/layouts/auth-layout';
 import { ContractLayout } from '@/layouts/contract-layout';
 import { DefaultLayout } from '@/layouts/default-layout';
 import { ContractTypes } from '@/models';
-import { AddContractPage } from '@/pages/add-contract';
 import { SignIn } from '@/pages/auth/sign-in';
 import { SignUp } from '@/pages/auth/sign-up';
 import {
+  AddContractPage,
   ContractERC1155DemoPage,
   ContractERC1155Page,
   ContractERC20DemoPage,
@@ -16,6 +16,7 @@ import {
   ContractERC721APage,
   ContractERC721DemoPage,
   ContractERC721Page,
+  EditContractPage,
 } from '@/pages/contracts';
 import { HomePage } from '@/pages/home';
 
@@ -55,23 +56,27 @@ export const router = createBrowserRouter([
         element: <AddContractPage />,
       },
       {
+        path: 'edit-contract/:id',
+        element: <EditContractPage />,
+      },
+      {
         path: 'demo-contracts',
         element: <ContractLayout />,
         children: [
           {
-            path: `${ContractTypes.ERC721}/:address`,
+            path: `${ContractTypes.ERC721}/:id`,
             element: <ContractERC721DemoPage />,
           },
           {
-            path: `${ContractTypes.ERC721A}/:address`,
+            path: `${ContractTypes.ERC721A}/:id`,
             element: <ContractERC721ADemoPage />,
           },
           {
-            path: `${ContractTypes.ERC20}/:address`,
+            path: `${ContractTypes.ERC20}/:id`,
             element: <ContractERC20DemoPage />,
           },
           {
-            path: `${ContractTypes.ERC1155}/:address`,
+            path: `${ContractTypes.ERC1155}/:id`,
             element: <ContractERC1155DemoPage />,
           },
         ],

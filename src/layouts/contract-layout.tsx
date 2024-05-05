@@ -11,15 +11,15 @@ export function ContractLayout() {
   const [user] = useLocalStorage<DBUser | null>('user', null);
   const navigate = useNavigate();
   const connectionStatus = useConnectionStatus();
-  const isWalletPending =
+  const isWalletLoading =
     connectionStatus === 'unknown' || connectionStatus === 'connecting';
   const isWalletConnected = connectionStatus === 'connected';
 
   useEffect(() => {
-    if (isWalletPending || isWalletConnected || isDemoUser(user)) return;
+    if (isWalletLoading || isWalletConnected || isDemoUser(user)) return;
 
     navigate('/');
-  }, [isWalletPending, isWalletConnected, user, navigate]);
+  }, [isWalletLoading, isWalletConnected, user, navigate]);
 
   return isWalletConnected || isDemoUser(user) ? <Outlet /> : null;
 }

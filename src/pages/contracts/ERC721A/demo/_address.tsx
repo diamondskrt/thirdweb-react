@@ -1,7 +1,7 @@
 import { Loader2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
-import { useGetContractByAddress } from '@/api/queries';
+import { useGetContractById } from '@/api/queries';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { NFTDemoCard } from '@/components/shared/nft-demo-card';
 import { Button } from '@/components/ui/button';
@@ -10,13 +10,13 @@ import type { DemoNFT } from '@/models';
 import { ContractTypes } from '@/models';
 
 export function ContractERC721ADemoPage() {
-  const { address: contractAddress } = useParams();
+  const { id: contractId } = useParams();
 
   const {
     data: contractMetadata,
     isLoading: isContractLoading,
     isError: isContractError,
-  } = useGetContractByAddress(contractAddress);
+  } = useGetContractById(contractId);
 
   const breadcrumbs = [
     {
@@ -50,7 +50,7 @@ export function ContractERC721ADemoPage() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2 h-[450px]">
                   <img
-                    src={contractMetadata?.image || '/assets/metaverse.jpg'}
+                    src="/assets/images/erc721A.jpg"
                     alt={contractMetadata?.name}
                     className="w-full h-full object-cover rounded-t-lg"
                   />

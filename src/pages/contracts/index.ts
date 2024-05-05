@@ -1,3 +1,5 @@
+export { AddContractPage } from './add-contract';
+export { EditContractPage } from './edit-contract';
 export { ContractERC20Page } from './ERC20/_address';
 export { ContractERC20DemoPage } from './ERC20/demo/_address';
 export { ContractERC721Page } from './ERC721/_address';

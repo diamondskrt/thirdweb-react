@@ -17,8 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import type { DBUser } from '@/models';
-
-import { formSchema } from './constants';
+import { formSchema } from '@/pages/contracts/constants';
 
 export function AddContractPage() {
   const [user] = useLocalStorage<DBUser | null>('user', null);
@@ -66,7 +65,11 @@ export function AddContractPage() {
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="address" {...field} />
+                    <Input
+                      placeholder="address"
+                      disabled={isLoading}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +82,7 @@ export function AddContractPage() {
                 <FormItem>
                   <FormLabel>Type</FormLabel>
                   <FormControl>
-                    <Input placeholder="type" {...field} />
+                    <Input placeholder="type" disabled={isLoading} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

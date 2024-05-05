@@ -26,8 +26,8 @@ export function StakeNFTCard({ nft, hideStakeBtn }: StakeNFTCardProps) {
     },
   ] = useGetContractAddresses([ContractTypes.ERC721, ContractTypes.ERC721A]);
 
-  const isLoading = isERC721Loading || isERC721ALoading;
   const isError = isERC721Error || isERC721AError;
+  const isLoading = (isERC721Loading || isERC721ALoading) && !isError;
 
   const address = useAddress();
 

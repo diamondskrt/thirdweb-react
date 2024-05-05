@@ -1,9 +1,8 @@
 import type { Models } from 'appwrite';
 
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import type { DemoNFT } from '@/models';
-
-import { Button } from '../ui/button';
-import { Card } from '../ui/card';
 
 interface NFTDemoCardProps {
   nft: DemoNFT | Models.Document;
@@ -11,10 +10,20 @@ interface NFTDemoCardProps {
 }
 
 export function NFTDemoCard({ nft, showStakeBtn }: NFTDemoCardProps) {
+  const nftImagesMap: Record<string, string> = {
+    '6613d00fd1bd058e126b': '/assets/images/nft-01.jpg',
+    '6613cfba7316333db778': '/assets/images/pass-01.jpg',
+    '6613cff2ae28a2064635': '/assets/images/pass-02.jpg',
+  };
+
+  const getNftImage = (nftId: string) => {
+    return nftImagesMap[nftId];
+  };
+
   return (
     <Card>
       <img
-        src={nft.image}
+        src={getNftImage(nft.$id)}
         alt={nft.title}
         style={{ width: '100%', height: 300, objectFit: 'cover' }}
       />

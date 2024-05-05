@@ -12,11 +12,13 @@ export type DBUser = {
 };
 
 export type Contract = {
+  $id: string;
+  creator: string;
   type: string;
   address: string;
 };
 
-export interface ContractPayload extends Contract {
+export interface ContractPayload {
   userId: string;
   address: string;
   type: string;
