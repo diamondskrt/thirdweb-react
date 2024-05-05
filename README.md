@@ -1,6 +1,8 @@
-# Web3 Blockchain App
+# A Web3 Blockchain App
 
 See demo here: [https://thirdweb-react-six.vercel.app/](https://thirdweb-react-six.vercel.app/)
+Login: admin@gmail.com
+Password: 12345678
 
 ![thirdweb-react](https://github.com/diamondskrt/thirdweb-react/blob/main/public/assets/images/cover.png?raw=true)
 
