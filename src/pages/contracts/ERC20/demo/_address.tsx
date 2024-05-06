@@ -1,13 +1,16 @@
 import { Loader2 } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 
-import { useGetContractAddresses, useGetContractById } from '@/api/queries';
+import { useGetContractById, useGetUserContracts } from '@/api/queries';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
+import type { DBUser } from '@/models';
 import { ContractTypes } from '@/models';
 
 export function ContractERC20DemoPage() {
+  const [user] = useLocalStorage<DBUser | null>('user', null);
   const { id: contractId } = useParams();
 
   const {
@@ -16,21 +19,19 @@ export function ContractERC20DemoPage() {
     isError: isContractError,
   } = useGetContractById(contractId);
 
-  const [
-    {
-      data: ERC721ContractAddress,
-      isLoading: isERC721Loading,
-      isError: isERC721Error,
-    },
-    {
-      data: ERC721AContractAddress,
-      isLoading: isERC721ALoading,
-      isError: isERC721AError,
-    },
-  ] = useGetContractAddresses([ContractTypes.ERC721, ContractTypes.ERC721A]);
+  const {
+    data: contracts,
+    isLoading: isContractsLoading,
+    isError: isContractsError,
+  } = useGetUserContracts(user?.accountId);
 
-  const isLoading = isContractLoading || isERC721Loading || isERC721ALoading;
-  const isError = isContractError || isERC721Error || isERC721AError;
+  const isLoading = isContractLoading || isContractsLoading;
+  const isError = isContractError || isContractsError;
+
+  const getContractsId = (contractType: ContractTypes) => {
+    const foundContract = contracts?.find(({ type }) => type === contractType);
+    return foundContract?.$id;
+  };
 
   const breadcrumbs = [
     {
@@ -96,18 +97,34 @@ export function ContractERC20DemoPage() {
                     <p>Earn more tokens by staking an ERC721 NFT.</p>
                   </CardHeader>
                   <CardFooter className="flex-col sm:flex-row items-start gap-4">
-                    <Link
-                      to={`/demo-contracts/ERC721/${ERC721ContractAddress}`}
-                      className="w-full"
-                    >
-                      <Button className="w-full sm:w-auto">Stake ERC721</Button>
-                    </Link>
-                    <Link
-                      to={`/demo-contracts/ERC721A/${ERC721AContractAddress}`}
-                      className="w-full"
-                    >
-                      <Button className="w-full sm:w-auto">Claim ERC721</Button>
-                    </Link>
+                    {getContractsId(ContractTypes.ERC721) ? (
+                      <Link
+                        to={`/demo-contracts/ERC721/${getContractsId(ContractTypes.ERC721)}`}
+                        className="w-full"
+                      >
+                        <Button className="w-full sm:w-auto">
+                          Stake ERC721
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button disabled className="w-full sm:w-auto">
+                        Stake ERC721
+                      </Button>
+                    )}
+                    {getContractsId(ContractTypes.ERC721A) ? (
+                      <Link
+                        to={`/demo-contracts/ERC721A/${getContractsId(ContractTypes.ERC721A)}`}
+                        className="w-full"
+                      >
+                        <Button className="w-full sm:w-auto">
+                          Claim ERC721
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Button disabled className="w-full sm:w-auto">
+                        Claim ERC721
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               </div>
